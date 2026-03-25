@@ -22,19 +22,19 @@ echo Done!
 echo.
 
 echo [4/4] Setting up distribution folder...
-if exist "dist\ShipbuildingDictionary" (
-    if not exist "dist\ShipbuildingDictionary\images" mkdir "dist\ShipbuildingDictionary\images"
-    echo Copying database file...
+if exist "dist\ShipbuildingDictionary.exe" (
+    echo Build successful!
     if exist shipbuilding_dict.db (
-        copy /Y shipbuilding_dict.db "dist\ShipbuildingDictionary\"
-        echo Database copied successfully!
-    ) else (
-        echo WARNING: shipbuilding_dict.db not found!
+        echo NOTE: DB file needs to be placed next to exe manually.
     )
-    echo Distribution folder ready!
 ) else (
-    echo ERROR: dist\ShipbuildingDictionary folder not found!
+    echo ERROR: ShipbuildingDictionary.exe not found!
 )
+echo.
+
+echo Cleaning up build folder...
+if exist build rmdir /s /q build
+echo Done!
 echo.
 
 echo ========================================

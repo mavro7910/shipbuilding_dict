@@ -1,12 +1,23 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
+import sys
 
 block_cipher = None
+
+# Python DLL 자동 탐지
+python_dir = os.path.dirname(sys.executable)
+python_version = f"{sys.version_info.major}{sys.version_info.minor}"
+dll_name = f"python{python_version}.dll"
+dll_path = os.path.join(python_dir, dll_name)
+
+binaries_list = []
+if os.path.exists(dll_path):
+    binaries_list.append((dll_path, '.'))
 
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
+    binaries=binaries_list,
     datas=[('shipbuilding_dict.db', '.')] if os.path.exists('shipbuilding_dict.db') else [],
     hiddenimports=[],
     hookspath=[],
@@ -24,29 +35,22 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz,
     a.scripts,
-    [],
-    exclude_binaries=True,
+    a.binaries,       # 추가
+    a.zipfiles,       # 추가
+    a.datas,          # 추가
+    exclude_binaries=False,  # True → False
     name='ShipbuildingDictionary',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,  # GUI app, hide console
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='icon.ico',  # Specify icon file path here if available
+    icon='icon.ico' if os.path.exists('icon.ico') else None,
 )
 
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='ShipbuildingDictionary',
-)
+# COLLECT 제거 - onefile 모드에서는 불필요
