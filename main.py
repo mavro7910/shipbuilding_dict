@@ -12,7 +12,7 @@ from gui.main_window import MainWindow
 def main():
     """애플리케이션 실행"""
     app = QApplication(sys.argv)
-    app.setApplicationName('조선업 축약어 사전')
+    app.setApplicationName('조선업 사전')
     
     window = MainWindow()
     window.show()
